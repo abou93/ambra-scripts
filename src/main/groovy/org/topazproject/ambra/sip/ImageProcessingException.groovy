@@ -8,7 +8,7 @@
  * http://opensource.org/licenses/ecl1.php
  */
 
-package org.topazproject.ambra.article.util;
+package org.topazproject.ambra.sip
 
 /**
  * ImageProcessingException.

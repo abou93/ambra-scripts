@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.topazproject.otm.owl;
+package org.topazproject.owl;
 
 import java.util.jar.JarFile
 import org.apache.commons.lang.text.StrMatcher

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.topazproject.ambra.article.util
+package org.topazproject.ambra.sip
 
 import org.topazproject.ambra.util.ToolHelper
 import org.topazproject.ambra.configuration.ConfigurationStore

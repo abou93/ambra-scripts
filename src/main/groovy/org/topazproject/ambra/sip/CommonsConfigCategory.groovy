@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package org.topazproject.ambra.article.util
+package org.topazproject.ambra.sip
 
 import org.apache.commons.configuration.Configuration
 
