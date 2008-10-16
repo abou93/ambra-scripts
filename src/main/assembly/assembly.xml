@@ -25,13 +25,6 @@
   <includeBaseDirectory>false</includeBaseDirectory>
   <fileSets>
     <fileSet>
-      <directory>target/classes</directory>
-      <outputDirectory>/</outputDirectory>
-      <includes>
-        <include>RunGroovy*.class</include>
-      </includes>
-    </fileSet>
-    <fileSet>
       <directory>src/main/resources</directory>
       <outputDirectory>/</outputDirectory>
       <includes>
