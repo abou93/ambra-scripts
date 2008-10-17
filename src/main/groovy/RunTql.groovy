@@ -40,14 +40,14 @@ csv = "csv"
 table = "table reduce quote"
 
 // Parse command line
-def cli = new CliBuilder(usage: 'runitql [-M mulgarahost:port] [-f script] [-T timeout] [-iwtpvN]')
+def cli = new CliBuilder(usage: 'run-tql [-M mulgarahost:port] [-f script] [-T timeout] [-iwtpvN]')
 cli.h(longOpt:'help', 'usage information')
 cli.v(longOpt:'verbose', 'turn on verbose mode')
 cli.e(longOpt:'echo', 'echo script file when running')
 cli.w(longOpt:'write-lock', 'transactions should grab a write-lock')
 cli.p(longOpt:'prompt', 'show the prompt even for a script file')
 cli.N(longOpt:'noprettyprint', 'Do not pretty-print results')
-cli.i(longOpt:'runinit', 'Run ~/.runitql even if running a script')
+cli.i(longOpt:'runinit', 'Run ~/.runtql even if running a script')
 cli.M(args:1, 'Mulgara host:port')
 cli.T(args:1, 'Transaction timeout in seconds [default: 60]')
 cli.f(args:1, 'script file')
@@ -102,9 +102,9 @@ help[".alias"] = """.alias [list|set alias uri]
 help[".quit"] = """.quit - Exit the interpreter"""
 help["variables"] = '''Variables can be used for a number of things:
   - Controlling features of the interpreter (see list of variables below)
-  - As place holders in itql. 
-    e.g. itql> %modelX = "<local:///topazproject#foo>"
-         itql> select $s $p $o from ${modelX} where $s $p $o;
+  - As place holders in tql. 
+    e.g. tql> %modelX = "<local:///topazproject#foo>"
+         tql> select $s $p $o from ${modelX} where $s $p $o;
 
 If a %-character is the first character of the line, the rest of the line is 
 sent to the groovy interpreter. Thus, %x=3 sets x to 3. %foo=bar is an error 
@@ -119,7 +119,7 @@ Special variables:
   trunc (int)- If set to an integer, literals are truncated to this number of
                characters
   verbose    - If set to true, will output more information'''
-help["init"] = "On startup, ~/.runitql is loaded."
+help["init"] = "On startup, ~/.runtql is loaded."
 
 // Various functions
 
@@ -158,7 +158,7 @@ def reduceUri(uri) {
 // Show the prompt. Is sometimes turned off if not running interactively
 def prompt() {
   if (bPrompt)
-    print "itql> "
+    print "tql> "
 }
 
 def reduce(s) {
@@ -380,21 +380,21 @@ def processLine(line, console, showPrompt) {
 
 // Read init file if it exists
 if (bInit) {
-  def initfile = new File(new File(System.getProperty("user.home")), ".runitql")
+  def initfile = new File(new File(System.getProperty("user.home")), ".runtql")
   if (initfile.exists())
     initfile.eachLine { line -> processLine(line, null, false) }
 }
 
 // Show the initial prompt
 if (bPrompt)
-  println 'Itql Interpreter. Run ".help" for more information.'
+  println 'Tql Interpreter. Run ".help" for more information.'
 prompt()
 
 // Use jline for some attempt at readline functionality
 def cr = new ConsoleReader(file, writer)
-cr.setDefaultPrompt("itql> ")
+cr.setDefaultPrompt("tql> ")
 try {
-  histfile = new File(System.getProperty("user.home"), ".runitql_history")
+  histfile = new File(System.getProperty("user.home"), ".runtql_history")
   cr.setHistory(new History(histfile))
   cr.setUseHistory(false)  // we add to history ourself
 } catch (IOException e) {
