@@ -121,17 +121,19 @@
     <profile>
       <id>run-groovy</id>
       <build>
-        <defaultGoal>exec:java</defaultGoal>
+        <defaultGoal>groovy:execute</defaultGoal>
         <plugins>
           <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>exec-maven-plugin</artifactId>
-            <version>1.0.2</version>
+            <groupId>org.codehaus.groovy.maven</groupId>
+            <artifactId>gmaven-plugin</artifactId>
             <configuration>
-              <mainClass>RunGroovy</mainClass>
-              <arguments>
-                <argument>${args}</argument>
-              </arguments>
+              <scriptpath>
+                <element>${pom.basedir}/src/main/groovy</element>
+              </scriptpath>
+              <source>
+                this.class.classLoader.addClasspath("${project.build.resources[0].directory}")
+                RunGroovy.main("${args}")
+              </source>
             </configuration>
           </plugin>
         </plugins>
@@ -141,17 +143,19 @@
     <profile>
       <id>run-tql</id>
       <build>
-        <defaultGoal>exec:java</defaultGoal>
+        <defaultGoal>groovy:execute</defaultGoal>
         <plugins>
           <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>exec-maven-plugin</artifactId>
-            <version>1.0.2</version>
+            <groupId>org.codehaus.groovy.maven</groupId>
+            <artifactId>gmaven-plugin</artifactId>
             <configuration>
-              <mainClass>RunTql</mainClass>
-              <arguments>
-                <argument>${args}</argument>
-              </arguments>
+              <scriptpath>
+                <element>${pom.basedir}/src/main/groovy</element>
+              </scriptpath>
+              <source>
+                this.class.classLoader.addClasspath("${project.build.resources[0].directory}")
+                RunTql.main("${args}")
+              </source>
             </configuration>
           </plugin>
         </plugins>
@@ -161,17 +165,19 @@
     <profile>
       <id>generate-owl</id>
       <build>
-        <defaultGoal>exec:java</defaultGoal>
+        <defaultGoal>groovy:execute</defaultGoal>
         <plugins>
           <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>exec-maven-plugin</artifactId>
-            <version>1.0.2</version>
+            <groupId>org.codehaus.groovy.maven</groupId>
+            <artifactId>gmaven-plugin</artifactId>
             <configuration>
-              <mainClass>org.topazproject.otm.owl.Owl</mainClass>
-              <arguments>
-                <argument>${args}</argument>
-              </arguments>
+              <scriptpath>
+                <element>${pom.basedir}/src/main/groovy</element>
+              </scriptpath>
+              <source>
+                this.class.classLoader.addClasspath("${project.build.resources[0].directory}")
+                org.topazproject.owl.Owl.main("${args}")
+              </source>
             </configuration>
           </plugin>
         </plugins>
@@ -184,13 +190,16 @@
         <defaultGoal>groovy:execute</defaultGoal>
         <plugins>
           <plugin>
-            <groupId>org.codehaus.mojo.groovy</groupId>
-            <artifactId>groovy-maven-plugin</artifactId>
+            <groupId>org.codehaus.groovy.maven</groupId>
+            <artifactId>gmaven-plugin</artifactId>
             <configuration>
+              <scriptpath>
+                <element>${pom.basedir}/src/main/groovy</element>
+              </scriptpath>
               <source>
-                import org.topazproject.ambra.article.util.AddManifest
-                AddManifest.main "${args}"
-              </source>
+                 this.class.classLoader.addClasspath("${project.build.resources[0].directory}")
+                 org.topazproject.ambra.sip.AddManifest.main("${args}")
+               </source>
             </configuration>
           </plugin>
         </plugins>
@@ -203,12 +212,15 @@
         <defaultGoal>groovy:execute</defaultGoal>
         <plugins>
           <plugin>
-            <groupId>org.codehaus.mojo.groovy</groupId>
-            <artifactId>groovy-maven-plugin</artifactId>
+            <groupId>org.codehaus.groovy.maven</groupId>
+            <artifactId>gmaven-plugin</artifactId>
             <configuration>
+              <scriptpath>
+                <element>${pom.basedir}/src/main/groovy</element>
+              </scriptpath>
               <source>
-                import org.topazproject.ambra.article.util.FixArticle
-                FixArticle.main "${args}"
+                this.class.classLoader.addClasspath("${project.build.resources[0].directory}")
+                org.topazproject.ambra.sip.FixArticle.main("${args}")
               </source>
             </configuration>
           </plugin>
@@ -222,12 +234,15 @@
         <defaultGoal>groovy:execute</defaultGoal>
         <plugins>
           <plugin>
-            <groupId>org.codehaus.mojo.groovy</groupId>
-            <artifactId>groovy-maven-plugin</artifactId>
+            <groupId>org.codehaus.groovy.maven</groupId>
+            <artifactId>gmaven-plugin</artifactId>
             <configuration>
+              <scriptpath>
+                <element>${pom.basedir}/src/main/groovy</element>
+              </scriptpath>
               <source>
-                import org.topazproject.ambra.article.util.ProcessImages
-                ProcessImages.main "${args}"
+                this.class.classLoader.addClasspath("${project.build.resources[0].directory}")
+                org.topazproject.ambra.sip.ProcessImages.main("${args}")
               </source>
             </configuration>
           </plugin>
@@ -241,12 +256,15 @@
         <defaultGoal>groovy:execute</defaultGoal>
         <plugins>
           <plugin>
-            <groupId>org.codehaus.mojo.groovy</groupId>
-            <artifactId>groovy-maven-plugin</artifactId>
+            <groupId>org.codehaus.groovy.maven</groupId>
+            <artifactId>gmaven-plugin</artifactId>
             <configuration>
+              <scriptpath>
+                <element>${pom.basedir}/src/main/groovy</element>
+              </scriptpath>
               <source>
-                import org.topazproject.ambra.article.util.ValidateSIP
-                ValidateSIP.main "${args}"
+                this.class.classLoader.addClasspath("${project.build.resources[0].directory}")
+                org.topazproject.ambra.sip.ValidateSIP.main("${args}")
               </source>
             </configuration>
           </plugin>
@@ -260,12 +278,15 @@
         <defaultGoal>groovy:execute</defaultGoal>
         <plugins>
           <plugin>
-            <groupId>org.codehaus.mojo.groovy</groupId>
-            <artifactId>groovy-maven-plugin</artifactId>
+            <groupId>org.codehaus.groovy.maven</groupId>
+            <artifactId>gmaven-plugin</artifactId>
             <configuration>
+              <scriptpath>
+                <element>${pom.basedir}/src/main/groovy</element>
+              </scriptpath>
               <source>
-                import org.topazproject.ambra.article.util.PrepareSIP
-                PrepareSIP.main "${args}"
+                this.class.classLoader.addClasspath("${project.build.resources[0].directory}")
+                org.topazproject.ambra.sip.PrepareSIP.main("${args}")
               </source>
             </configuration>
           </plugin>
