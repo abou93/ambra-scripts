@@ -19,7 +19,7 @@
 import org.topazproject.interpreter.Answer;
 import org.topazproject.otm.SessionFactory;
 import org.topazproject.otm.impl.SessionFactoryImpl;
-import org.topazproject.otm.ModelConfig;
+import org.topazproject.otm.GraphConfig;
 import org.topazproject.otm.stores.ItqlStore;
 import org.topazproject.otm.query.Results;
 
@@ -103,8 +103,8 @@ help[".quit"] = """.quit - Exit the interpreter"""
 help["variables"] = '''Variables can be used for a number of things:
   - Controlling features of the interpreter (see list of variables below)
   - As place holders in tql. 
-    e.g. tql> %modelX = "<local:///topazproject#foo>"
-         tql> select $s $p $o from ${modelX} where $s $p $o;
+    e.g. tql> %graphX = "<local:///topazproject#foo>"
+         tql> select $s $p $o from ${graphX} where $s $p $o;
 
 If a %-character is the first character of the line, the rest of the line is 
 sent to the groovy interpreter. Thus, %x=3 sets x to 3. %foo=bar is an error 
@@ -249,8 +249,8 @@ def showTable(res) {
  *
  * This allows things like:
  * <pre>
- *   @model = "<local:///topazproject#mymodel>"
- *   select $s $p $o from ${model} where $s $p $o;
+ *   @graph = "<local:///topazproject#mygraph>"
+ *   select $s $p $o from ${graph} where $s $p $o;
  * </pre>
  */
 def expandVars(query) {

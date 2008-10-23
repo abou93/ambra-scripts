@@ -27,7 +27,7 @@ import org.apache.commons.logging.LogFactory;
 
 import org.topazproject.otm.ClassMetadata
 import org.topazproject.otm.impl.SessionFactoryImpl
-import org.topazproject.otm.ModelConfig
+import org.topazproject.otm.GraphConfig
 import org.topazproject.otm.OtmException
 import org.topazproject.otm.owl.OwlGenerator
 import org.topazproject.otm.SessionFactory
@@ -45,7 +45,7 @@ class Owl {
   static GroovyClassLoader gcl = new GroovyClassLoader()
   static SessionFactory factory = new SessionFactoryImpl()
 
-  static String MODEL_PREFIX = "local:///topazproject#"
+  static String GRAPH_PREFIX = "local:///topazproject#"
 
   /**
    * Given a list of directories and/or jar files, generate metadata.
@@ -79,7 +79,7 @@ class Owl {
     }
 
     // Do the deed
-    factory.addModel(new ModelConfig("metadata", URI.create(MODEL_PREFIX + "metadata"), null))
+    factory.addGraph(new GraphConfig("metadata", URI.create(GRAPH_PREFIX + "metadata"), null))
     OwlGenerator owlGenerator = new OwlGenerator("http://www.plos.org/content_model#",
                (SessionFactory)factory);
     owlGenerator.generateClasses();
@@ -123,10 +123,10 @@ class Owl {
 
     try {
       ClassMetadata cm = factory.getClassMetadata(clazz);
-      String model = (cm != null) ? cm.getModel() : null
-      if (model != null) {
-        factory.addModel(new ModelConfig(model, URI.create(MODEL_PREFIX + model), null))
-        println "Loaded ${clazz.getName()} into ${MODEL_PREFIX}${model}"
+      String graph = (cm != null) ? cm.getGraph() : null
+      if (graph != null) {
+        factory.addGraph(new GraphConfig(graph, URI.create(GRAPH_PREFIX + graph), null))
+        println "Loaded ${clazz.getName()} into ${GRAPH_PREFIX}${graph}"
       }
     } catch (Throwable t) {
       println "error processing '${clazz.getName()}' " + t
