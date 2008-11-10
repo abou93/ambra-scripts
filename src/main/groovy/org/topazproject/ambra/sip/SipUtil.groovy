@@ -19,13 +19,10 @@
 
 package org.topazproject.ambra.sip
 
-import java.util.zip.ZipEntry
-import java.util.zip.ZipFile
-import java.util.zip.ZipOutputStream
-
 import org.xml.sax.EntityResolver
 import org.xml.sax.InputSource
 
+import org.apache.commons.compress.archivers.ArchiveEntry
 import org.topazproject.xml.transform.cache.CachedSource
 
 /**
@@ -42,7 +39,7 @@ public class SipUtil {
    * afterwards the zips are closed and the new one is renamed to the current. The closure is
    * responsible for fully populating the new zip, which includes copying over all files from the
    * current zip that should be preserved. The new zip has a helper method,
-   * <code>copyFrom(ZipFile, entries)</code>, which can be used to easily copy entries from the
+   * <code>copyFrom(ArchiveFile, entries)</code>, which can be used to easily copy entries from the
    * current to the new zip.
    *
    * <p>The following example demonstrates a no-op:
@@ -56,13 +53,13 @@ public class SipUtil {
    * @param newName if not-null, the name of the resulting zip; if null, <var>fname</var>
    *                will be overwritten
    * @param closure the closure to run; it will be passed two arguments, the original zip as
-   *                a ZipFile, and the new zip as a ZipOutputStream
+   *                an ArchiveFile, and the new zip as an ArchiveOutputStream
    * @return whatever was returned by the closure
    */
   public static def updateZip(String fname, String newName, Closure c) throws IOException {
     // open up the zip
     File zip = new File(fname)
-    ZipFile zf = new ZipFile(zip)
+    ArchiveFile zf = new ArchiveFile(zip)
 
     // start the new zip file
     if (newName && zip.canonicalFile == new File(newName).canonicalFile)
@@ -70,15 +67,13 @@ public class SipUtil {
 
     File znew = newName ? new File(newName) :
                           File.createTempFile(zip.name, '.tmp', zip.absoluteFile.parentFile)
-    ZipOutputStream zout = new ZipOutputStream(znew.newOutputStream())
+    ArchiveOutputStream zout = new ArchiveOutputStream(znew.newOutputStream(), zf.ct, zf.at)
 
     // copy/add/whatever
     def res
     boolean ok = false;
     try {
-      use (ZipHelperCategory) {
-        res = c(zf, zout)
-      }
+      res = c(zf, zout)
       ok = true
     } finally {
       // cleanup
@@ -125,10 +120,10 @@ public class SipUtil {
    * @param manifest the manifest
    * @return the parsed article
    */
-  public static def getArticle(ZipFile sip, def manifest) {
+  public static def getArticle(ArchiveFile sip, def manifest) {
     XmlSlurper slurper = new XmlSlurper()
     slurper.setEntityResolver(CachedSource.getResolver())
-    ZipEntry ae = sip.getEntry(manifest.articleBundle.article.'@main-entry'.text())
+    ArchiveEntry ae = sip.getEntry(manifest.articleBundle.article.'@main-entry'.text())
     return slurper.parse(sip.getInputStream(ae))
   }
 
@@ -143,18 +138,6 @@ public class SipUtil {
     return name.substring(name.lastIndexOf('.') + 1).toUpperCase()
   }
 
-}
-
-private class ZipHelperCategory {
-  static ZipOutputStream copyFrom(ZipOutputStream self, ZipFile zf, def entries) {
-    for (e in entries) {
-      self.putNextEntry(new ZipEntry(e instanceof ZipEntry ? e.name : e.toString()))
-      self << zf.getInputStream(e)
-      self.closeEntry()
-    }
-
-    return self
-  }
 }
 
 class ManifestDTDResolver implements EntityResolver {

@@ -20,7 +20,6 @@
 package org.topazproject.ambra.sip
 
 import org.topazproject.ambra.util.ToolHelper
-import java.util.zip.ZipFile
 
 /*
  * Prepare a SIP from an AP zip. This goes through the following steps:
@@ -59,7 +58,7 @@ def out = opt.o ?: inp
 println("SIP for " + inp)
 
 try {
-  boolean hasManif = new ZipFile(inp).entries().iterator()*.name.contains(SipUtil.MANIFEST)
+  boolean hasManif = new ArchiveFile(inp).entries().iterator()*.name.contains(SipUtil.MANIFEST)
   if (opt.f || !hasManif) {
     new AddManifest().addManifest(inp, out)
     println "  manifest ${hasManif ? 'replaced' : 'added'}"

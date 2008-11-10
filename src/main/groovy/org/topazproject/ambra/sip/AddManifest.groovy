@@ -19,9 +19,6 @@
 
 package org.topazproject.ambra.sip
 
-import java.util.zip.ZipEntry
-import java.util.zip.ZipFile
-
 import org.topazproject.ambra.util.ToolHelper
 
 /**
@@ -73,7 +70,7 @@ public class AddManifest {
       def objs = entries*.minus(~/\.[^.]+$/).unique().minus(base)
 
       // write the manifest
-      zout.putNextEntry(new ZipEntry(SipUtil.MANIFEST))
+      zout.putNextEntry(SipUtil.MANIFEST)
 
       zout << '<?xml version="1.1"?>\n'
       zout << "<!DOCTYPE manifest SYSTEM \"${SipUtil.MANIFEST_DTD}\">\n"
@@ -101,7 +98,7 @@ public class AddManifest {
       zout.closeEntry()
 
       // add the dtd
-      zout.putNextEntry(new ZipEntry(SipUtil.MANIFEST_DTD))
+      zout.putNextEntry(SipUtil.MANIFEST_DTD)
       zout << getClass().getResourceAsStream("manifest.dtd")
       zout.closeEntry()
 

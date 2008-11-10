@@ -19,12 +19,10 @@
 
 package org.topazproject.ambra.sip
 
-import java.util.zip.ZipEntry
-import java.util.zip.ZipFile
-
 import org.xml.sax.ErrorHandler
 import org.xml.sax.SAXParseException
 
+import org.apache.commons.compress.archivers.ArchiveEntry
 import org.topazproject.ambra.util.ToolHelper
 
 /**
@@ -55,9 +53,9 @@ public class ValidateSIP {
   public void validate(String fname) throws IOException, ValidationException {
     ValidationException ve = new ValidationException()
 
-    ZipFile zf = new ZipFile(fname)
+    ArchiveFile zf = new ArchiveFile(fname)
 
-    ZipEntry me = zf.getEntry(SipUtil.MANIFEST)
+    ArchiveEntry me = zf.getEntry(SipUtil.MANIFEST)
     if (me == null) {
       ve.addError(
           "No manifest found - expecting one entry called '${SipUtil.MANIFEST}' in zip file")
@@ -82,7 +80,7 @@ public class ValidateSIP {
   /**
    * Check that article is defined and present.
    */
-  private void validateManifest(ZipFile zf, def manif, ValidationException ve) throws IOException {
+  private void validateManifest(ArchiveFile zf, def manif, ValidationException ve) throws IOException {
     def art = manif.articleBundle.article
 
     // validate the main-entry attribute
@@ -109,7 +107,7 @@ public class ValidateSIP {
    * Check that links are absolute, local links point to something in the manifest, and internal
    * refs reference an existing id.
    */
-  private void validateLinks(ZipFile zf, def manif, def art, ValidationException ve)
+  private void validateLinks(ArchiveFile zf, def manif, def art, ValidationException ve)
       throws IOException {
     String artUri = manif.articleBundle.article.'@uri';
 
@@ -167,7 +165,7 @@ public class ValidateSIP {
   /**
    * Check that all entries in the manifest are referenced in the article (no orphans).
    */
-  private void validateEntries(ZipFile zf, def manif, def art, ValidationException ve)
+  private void validateEntries(ArchiveFile zf, def manif, def art, ValidationException ve)
       throws IOException {
     String artUri = manif.articleBundle.article.'@uri';
     def refs = art.'**'*.'@xlink:href'.findAll{ isLocalLink(it.text(), artUri) }*.text()

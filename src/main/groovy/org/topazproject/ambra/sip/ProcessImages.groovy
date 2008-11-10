@@ -19,8 +19,7 @@
 
 package org.topazproject.ambra.sip
 
-import java.util.zip.ZipEntry
-
+import org.apache.commons.compress.archivers.ArchiveEntry
 import org.apache.commons.configuration.Configuration
 
 /**
@@ -33,11 +32,11 @@ import org.apache.commons.configuration.Configuration
 public class ProcessImages {
   /** Map of article image contexts and their associated representations. */
   private static final Map<String, String[]> repsByCtxt = new HashMap<String, String[]>()
-  
+
   static {
     String[] smallMediumLarge = [ "PNG_S", "PNG_M", "PNG_L" ]
     String[] singleLarge      = [ "PNG" ]
-  
+
     repsByCtxt.put('fig',                 smallMediumLarge)
     repsByCtxt.put('table-wrap',          smallMediumLarge)
     repsByCtxt.put('disp-formula',        singleLarge)
@@ -74,7 +73,7 @@ public class ProcessImages {
 
     SipUtil.updateZip(articleFile, newName) { articleZip, newZip ->
       // get manifest
-      ZipEntry me = articleZip.getEntry(SipUtil.MANIFEST)
+      ArchiveEntry me = articleZip.getEntry(SipUtil.MANIFEST)
       if (me == null)
         throw new IOException(
             "No manifest found - expecting one entry called '${SipUtil.MANIFEST}' in zip file")
@@ -116,15 +115,12 @@ public class ProcessImages {
         if (verbose)
           println 'Adding to zip file: ' + newImg.name
 
-        newZip.putNextEntry(new ZipEntry(newImg.name))
-        newImg.withInputStream{ newZip << it }
-        newZip.closeEntry()
-
+        newZip.writeEntry(newImg.name, newImg.length(), newImg.newInputStream())
         newImg.delete()
       }
 
       // write out the new manifest
-      newZip.putNextEntry(new ZipEntry(SipUtil.MANIFEST))
+      newZip.putNextEntry(SipUtil.MANIFEST)
 
       newZip << '<?xml version="1.1"?>\n'
       newZip << '<!DOCTYPE manifest SYSTEM "manifest.dtd">\n'

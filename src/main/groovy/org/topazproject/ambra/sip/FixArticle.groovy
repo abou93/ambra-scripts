@@ -19,9 +19,6 @@
 
 package org.topazproject.ambra.sip
 
-import java.util.zip.ZipEntry
-import java.util.zip.ZipFile
-
 import javax.xml.transform.Transformer
 import javax.xml.transform.TransformerFactory
 import javax.xml.transform.URIResolver
@@ -33,6 +30,7 @@ import groovy.xml.FactorySupport
 
 import net.sf.saxon.TransformerFactoryImpl
 
+import org.apache.commons.compress.archivers.ArchiveEntry
 import org.topazproject.ambra.configuration.ConfigurationStore
 import org.topazproject.ambra.util.ToolHelper
 import org.topazproject.xml.transform.cache.CachedSource
@@ -57,7 +55,7 @@ public class FixArticle {
   public void fixLinks(String fname, String newName) throws IOException {
     SipUtil.updateZip(fname, newName) { zf, zout ->
       // get manifest
-      ZipEntry me = zf.getEntry(SipUtil.MANIFEST)
+      ArchiveEntry me = zf.getEntry(SipUtil.MANIFEST)
       if (me == null)
         throw new IOException(
             "No manifest found - expecting one entry called '${SipUtil.MANIFEST}' in zip file")
@@ -66,7 +64,7 @@ public class FixArticle {
 
       // get article
       String aeName = manif.articleBundle.article.'@main-entry'.text()
-      ZipEntry ae = zf.getEntry(aeName)
+      ArchiveEntry ae = zf.getEntry(aeName)
       if (ae == null)
         throw new IOException("article entry '${aeName}' not found in zip")
 
@@ -85,9 +83,7 @@ public class FixArticle {
       ByteArrayOutputStream baos = new ByteArrayOutputStream()
       t.transform(new CachedSource(getInpSrc(zf, ae)), new StreamResult(baos))
 
-      zout.putNextEntry(new ZipEntry(aeName))
-      zout << baos.toByteArray()
-      zout.closeEntry()
+      zout.writeEntry(aeName, baos.toByteArray())
 
       // copy everything else
       zout.copyFrom(zf, zf.entries().iterator()*.name.minus(aeName))
@@ -104,7 +100,7 @@ public class FixArticle {
     return tFactory
   }
 
-  private InputSource getInpSrc(ZipFile zf, ZipEntry ze) {
+  private InputSource getInpSrc(ArchiveFile zf, ArchiveEntry ze) {
     return new InputSource(byteStream:zf.getInputStream(ze), systemId:ze.name)
   }
 
