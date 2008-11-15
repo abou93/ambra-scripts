@@ -126,7 +126,7 @@
     <profile>
       <id>run-groovy</id>
       <build>
-        <defaultGoal>groovy:execute</defaultGoal>
+        <defaultGoal>org.codehaus.groovy.maven:gmaven-plugin:execute</defaultGoal>
         <plugins>
           <plugin>
             <groupId>org.codehaus.groovy.maven</groupId>
@@ -148,7 +148,7 @@
     <profile>
       <id>run-tql</id>
       <build>
-        <defaultGoal>groovy:execute</defaultGoal>
+        <defaultGoal>org.codehaus.groovy.maven:gmaven-plugin:execute</defaultGoal>
         <plugins>
           <plugin>
             <groupId>org.codehaus.groovy.maven</groupId>
@@ -170,7 +170,7 @@
     <profile>
       <id>generate-owl</id>
       <build>
-        <defaultGoal>groovy:execute</defaultGoal>
+        <defaultGoal>org.codehaus.groovy.maven:gmaven-plugin:execute</defaultGoal>
         <plugins>
           <plugin>
             <groupId>org.codehaus.groovy.maven</groupId>
@@ -192,7 +192,7 @@
     <profile>
       <id>add-manifest</id>
       <build>
-        <defaultGoal>groovy:execute</defaultGoal>
+        <defaultGoal>org.codehaus.groovy.maven:gmaven-plugin:execute</defaultGoal>
         <plugins>
           <plugin>
             <groupId>org.codehaus.groovy.maven</groupId>
@@ -214,7 +214,7 @@
     <profile>
       <id>fix-article</id>
       <build>
-        <defaultGoal>groovy:execute</defaultGoal>
+        <defaultGoal>org.codehaus.groovy.maven:gmaven-plugin:execute</defaultGoal>
         <plugins>
           <plugin>
             <groupId>org.codehaus.groovy.maven</groupId>
@@ -236,7 +236,7 @@
     <profile>
       <id>process-images</id>
       <build>
-        <defaultGoal>groovy:execute</defaultGoal>
+        <defaultGoal>org.codehaus.groovy.maven:gmaven-plugin:execute</defaultGoal>
         <plugins>
           <plugin>
             <groupId>org.codehaus.groovy.maven</groupId>
@@ -258,7 +258,7 @@
     <profile>
       <id>validate-sip</id>
       <build>
-        <defaultGoal>groovy:execute</defaultGoal>
+        <defaultGoal>org.codehaus.groovy.maven:gmaven-plugin:execute</defaultGoal>
         <plugins>
           <plugin>
             <groupId>org.codehaus.groovy.maven</groupId>
@@ -280,7 +280,7 @@
     <profile>
       <id>prepare-sip</id>
       <build>
-        <defaultGoal>groovy:execute</defaultGoal>
+        <defaultGoal>org.codehaus.groovy.maven:gmaven-plugin:execute</defaultGoal>
         <plugins>
           <plugin>
             <groupId>org.codehaus.groovy.maven</groupId>
