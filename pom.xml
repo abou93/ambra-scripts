@@ -176,12 +176,22 @@
             <groupId>org.codehaus.groovy.maven</groupId>
             <artifactId>gmaven-plugin</artifactId>
             <configuration>
+              <classpath>
+                <element>
+                  <groupId>org.topazproject</groupId>
+                  <artifactId>otm</artifactId>
+                </element>
+                <element>
+                  <groupId>org.topazproject</groupId>
+                  <artifactId>otm-extras</artifactId>
+                </element>
+              </classpath>
               <scriptpath>
                 <element>${pom.basedir}/src/main/groovy</element>
               </scriptpath>
               <source>
                 this.class.classLoader.addClasspath("${project.build.resources[0].directory}")
-                org.topazproject.owl.Owl.main("${args}")
+                org.topazproject.owl.Owl.generate(this.class.classLoader, "${args}")
               </source>
             </configuration>
           </plugin>

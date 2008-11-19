@@ -16,21 +16,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.topazproject.owl;
+package org.topazproject.owl
 
+import java.util.Collections
+import java.util.HashMap
 import java.util.jar.JarFile
-import org.apache.commons.lang.text.StrMatcher
-import org.apache.commons.lang.text.StrTokenizer
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import org.topazproject.otm.ClassMetadata
-import org.topazproject.otm.impl.SessionFactoryImpl
-import org.topazproject.otm.GraphConfig
+import org.topazproject.otm.EntityMode
 import org.topazproject.otm.OtmException
-import org.topazproject.otm.owl.OwlGenerator
 import org.topazproject.otm.SessionFactory
+
+import org.topazproject.otm.criterion.DetachedCriteria
+
+import org.topazproject.otm.impl.SessionFactoryImpl
+
+import org.topazproject.otm.mapping.EntityBinder
+import org.topazproject.otm.mapping.java.ClassBinder
+
+import org.topazproject.otm.owl.OwlGenerator
+
+import org.topazproject.ambra.util.ToolHelper
 
 /**
  * Groovy script that figures out OTM annotated classes and passed them to
@@ -40,18 +46,16 @@ import org.topazproject.otm.SessionFactory
  * @author Amit Kapoor
  */
 class Owl {
-  private static final Log log = LogFactory.getLog(Owl.class);
-
-  static GroovyClassLoader gcl = new GroovyClassLoader()
+  static GroovyClassLoader gcl = null
   static SessionFactory factory = new SessionFactoryImpl()
-
-  static String GRAPH_PREFIX = "local:///topazproject#"
 
   /**
    * Given a list of directories and/or jar files, generate metadata.
    */
-  public static void main(String[] args) {
-    addClasses(fixArgs(args))
+  public static void generate(ClassLoader parent, String[] args) {
+    gcl = new GroovyClassLoader(parent)
+    addClasses(ToolHelper.fixArgs(args))
+    generateOwl()
   }
 
   /**
@@ -78,16 +82,38 @@ class Owl {
         addDirectory(file)
     }
 
-    // Do the deed
-    factory.addGraph(new GraphConfig("metadata", URI.create(GRAPH_PREFIX + "metadata"), null))
-    OwlGenerator owlGenerator = new OwlGenerator("http://www.plos.org/content_model#",
-               (SessionFactory)factory);
-    owlGenerator.generateClasses();
-    owlGenerator.generateClassObjectProperties();
-    owlGenerator.generateClassDataProperties();
-    owlGenerator.save("file:/tmp/plos.owl");
+    // Add Object to class meta-data
+    Map<EntityMode, EntityBinder> binders = new HashMap<EntityMode, EntityBinder>();
+    binders.put(EntityMode.POJO, new ClassBinder(Object.class));
+    factory.setClassMetadata(new ClassMetadata(binders, "Object", Collections.EMPTY_SET,
+                                               Collections.EMPTY_SET, "", null, Collections.EMPTY_SET,
+                                               null, Collections.EMPTY_SET, Collections.EMPTY_SET));
+    
+    // DetachedCriteria
+    binders = new HashMap<EntityMode, EntityBinder>();
+    binders.put(EntityMode.POJO, new ClassBinder(DetachedCriteria.class));
+    factory.setClassMetadata(new ClassMetadata(binders, "DetachedCriteria", Collections.EMPTY_SET,
+                                               Collections.EMPTY_SET, "", null, Collections.EMPTY_SET,
+                                               null, Collections.EMPTY_SET, Collections.EMPTY_SET));
+
+    factory.validate()
   }
 
+  /**
+   * Generate the OWL statements
+   */
+  static void generateOwl() {
+    OwlGenerator owlGen= new OwlGenerator("http://www.plos.org/content_model#", (SessionFactory)factory)
+    owlGen.addNamespaces(factory.listAliases())
+    owlGen.generateClasses()
+    owlGen.generateClassObjectProperties()
+    owlGen.generateClassDataProperties()
+    owlGen.save("file:" + System.properties['user.home'] + File.separator + "ambra.owl")
+  }
+
+  /**
+   * Extract class files from jar
+   */
   static void addJar(File file) {
     def jarfile = new JarFile(file)
     jarfile.entries().each() {
@@ -100,7 +126,9 @@ class Owl {
     }
   }
 
-  /** Iterate over all the files in a directory and find any otm classes. */
+  /** 
+   * Iterate over all the files in a directory and find any otm classes.
+   */
   static void addDirectory(File dir) {
     dir.eachFileRecurse() { fname ->
       if (fname =~ /\.class$/) {
@@ -113,51 +141,34 @@ class Owl {
     }
   }
 
-  /** See if a class is otm annotated and add it to our factory. */
+  /** 
+   * See if a class is otm annotated and add it to our factory.
+   */
   static void processClass(Class clazz) {
     try {
       factory.preload(clazz)
     } catch (OtmException o) {
-      log.debug("Unable to load '$clazz'", o)
-    }
-
-    try {
-      ClassMetadata cm = factory.getClassMetadata(clazz);
-      String graph = (cm != null) ? cm.getGraph() : null
-      if (graph != null) {
-        factory.addGraph(new GraphConfig(graph, URI.create(GRAPH_PREFIX + graph), null))
-        println "Loaded ${clazz.getName()} into ${GRAPH_PREFIX}${graph}"
-      }
-    } catch (Throwable t) {
-      println "error processing '${clazz.getName()}' " + t
-      t.printStackTrace()
+      println "OTM Exception loading " + clazz.getName() + " : $o"
     }
   }
 
-  /** Convert a filename to a classname and load it via our GroovyClassLoader */
+  /**
+   * Convert a filename to a classname and load it via our GroovyClassLoader
+   */
   static Class getClass(String name) {
     def cName = name.replaceAll(/\//, ".") - ".class"
     try {
       return gcl.loadClass(cName)
     } catch (NoClassDefFoundError ncdfe) {
-      // Probably this is a subclass of a library that is unloaded
       println "$ncdfe (loading $cName)"
       return null
     }
   }
 
-  /** Deal with ~ at the beginning of a file or directory */
+  /**
+   * Deal with ~ at the beginning of a file or directory
+   */
   static File expandFilename(String name) {
     return new File(name.replaceFirst(/^~/, System.getProperty("user.home")))
-  }
-
-  /** Fix an arg string if called from maven */
-  static String[] fixArgs(String[] args) {
-    // Fix crap with maven sometimes passing args of [ null ] (an array of one null)
-    if (args[0] == null) args = [ ]
-    if (args != null && args.length == 1 && args[0] != null)
-      args = new StrTokenizer(args[0], StrMatcher.trimMatcher(), StrMatcher.quoteMatcher())
-                      .getTokenArray()
-    return args
   }
 }
