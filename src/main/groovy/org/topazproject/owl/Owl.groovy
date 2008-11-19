@@ -46,14 +46,13 @@ import org.topazproject.ambra.util.ToolHelper
  * @author Amit Kapoor
  */
 class Owl {
-  static GroovyClassLoader gcl = null
+  static GroovyClassLoader gcl = new GroovyClassLoader()
   static SessionFactory factory = new SessionFactoryImpl()
 
   /**
    * Given a list of directories and/or jar files, generate metadata.
    */
-  public static void generate(ClassLoader parent, String[] args) {
-    gcl = new GroovyClassLoader(parent)
+  public static void main(String[] args) {
     addClasses(ToolHelper.fixArgs(args))
     generateOwl()
   }
