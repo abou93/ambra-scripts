@@ -105,8 +105,7 @@ class Owl {
     OwlGenerator owlGen= new OwlGenerator("http://www.plos.org/content_model#", (SessionFactory)factory)
     owlGen.addNamespaces(factory.listAliases())
     owlGen.generateClasses()
-    owlGen.generateClassObjectProperties()
-    owlGen.generateClassDataProperties()
+    owlGen.generateProperties()
     owlGen.save("file:" + System.properties['user.home'] + File.separator + "ambra.owl")
   }
 
