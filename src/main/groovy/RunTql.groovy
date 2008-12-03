@@ -17,14 +17,12 @@
  * limitations under the License.
  */
 import org.topazproject.interpreter.Answer;
-import org.topazproject.otm.SessionFactory;
+
+import org.topazproject.ambra.util.ToolHelper;
+
 import org.topazproject.otm.impl.SessionFactoryImpl;
-import org.topazproject.otm.GraphConfig;
 import org.topazproject.otm.stores.ItqlStore;
 import org.topazproject.otm.query.Results;
-
-import org.apache.commons.lang.text.StrMatcher;
-import org.apache.commons.lang.text.StrTokenizer;
 
 import jline.ConsoleReader;
 import jline.History;
@@ -54,11 +52,7 @@ cli.f(args:1, 'script file')
 cli.m(args:1, 'mode')
 cli.t(args:1, 'number of characters to truncate literals to')
 
-if (args.size() > 0 && args[0] == null) args = [ ]
-if (args != null && args.length == 1)
-  args = new StrTokenizer(args[0], StrMatcher.trimMatcher(), StrMatcher.quoteMatcher()).tokenArray
-
-def opt = cli.parse(args)
+def opt = cli.parse(ToolHelper.fixArgs(args))
 if (!opt) { cli.usage(); return }
 if (opt.h) { cli.usage(); return }
 

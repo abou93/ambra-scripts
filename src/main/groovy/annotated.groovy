@@ -16,12 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import org.topazproject.ambra.util.ToolHelper;
 
 import org.topazproject.otm.impl.SessionFactoryImpl;
 import org.topazproject.otm.stores.ItqlStore;
 import org.topazproject.xml.transform.cache.CachedSource;
-import org.apache.commons.lang.text.StrMatcher;
-import org.apache.commons.lang.text.StrTokenizer;
 
 // Constants
 MULGARA_BASE = "localhost"
@@ -42,10 +41,7 @@ cli.e(args:1, 'Date to end with')
 cli.F(args:1, 'Fedora host:port')
 cli.M(args:1, 'Mulgara host:port')
 
-if (args.length == 1 && args[0].indexOf(' ') > 0)
-  args = new StrTokenizer(args[0], StrMatcher.trimMatcher(), StrMatcher.quoteMatcher())
-                  .getTokenArray()
-def opt = cli.parse(args)
+def opt = cli.parse(ToolHelper.fixArgs(args))
 if (!opt) return
 if (opt.h) { cli.usage(); return }
 def mulgaraBase = (opt.M) ? opt.M : MULGARA_BASE
