@@ -155,12 +155,6 @@ def reduceUri(uri) {
   return uri
 }
 
-// Show the prompt. Is sometimes turned off if not running interactively
-def prompt() {
-  if (bPrompt)
-    print "tql> "
-}
-
 def reduce(s) {
   for (alias in factory.listAliases())
     s = s.replaceAll(alias.value, alias.key + ":")
@@ -373,9 +367,6 @@ def processLine(line, console, showPrompt) {
   }
   if (line.trim() != "")
     query += " " + line.trim()
-
-  if (showPrompt)
-    prompt()
 }
 
 // Read init file if it exists
@@ -388,11 +379,11 @@ if (bInit) {
 // Show the initial prompt
 if (bPrompt)
   println 'Tql Interpreter. Run ".help" for more information.'
-prompt()
 
 // Use jline for some attempt at readline functionality
 def cr = new ConsoleReader(file, writer)
-cr.setDefaultPrompt("tql> ")
+if (bPrompt)
+  cr.setDefaultPrompt("tql> ")
 try {
   histfile = new File(System.getProperty("user.home"), ".runtql_history")
   cr.setHistory(new History(histfile))
