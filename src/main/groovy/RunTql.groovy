@@ -17,9 +17,8 @@
  * limitations under the License.
  */
 import org.topazproject.interpreter.Answer;
-
 import org.topazproject.ambra.util.ToolHelper;
-
+import org.topazproject.mulgara.itql.DefaultItqlClientFactory;
 import org.topazproject.otm.impl.SessionFactoryImpl;
 import org.topazproject.otm.stores.ItqlStore;
 import org.topazproject.otm.query.Results;
@@ -38,7 +37,7 @@ csv = "csv"
 table = "table reduce quote"
 
 // Parse command line
-def cli = new CliBuilder(usage: 'run-tql [-M mulgarahost:port] [-f script] [-T timeout] [-iwtpvN]')
+def cli = new CliBuilder(usage: 'run-tql [-M mulgarahost:port|-D directory] [-f script] [-T timeout] [-iwtpvN]')
 cli.h(longOpt:'help', 'usage information')
 cli.v(longOpt:'verbose', 'turn on verbose mode')
 cli.e(longOpt:'echo', 'echo script file when running')
@@ -47,6 +46,7 @@ cli.p(longOpt:'prompt', 'show the prompt even for a script file')
 cli.N(longOpt:'noprettyprint', 'Do not pretty-print results')
 cli.i(longOpt:'runinit', 'Run ~/.runtql even if running a script')
 cli.M(args:1, 'Mulgara host:port')
+cli.D(args:1, 'directory (embedded mulgara)')
 cli.T(args:1, 'Transaction timeout in seconds [default: 60]')
 cli.f(args:1, 'script file')
 cli.m(args:1, 'mode')
@@ -55,6 +55,7 @@ cli.t(args:1, 'number of characters to truncate literals to')
 def opt = cli.parse(ToolHelper.fixArgs(args))
 if (!opt) { cli.usage(); return }
 if (opt.h) { cli.usage(); return }
+if (opt.M && opt.D) { cli.usage(); return }
 
 def file = (opt.f) ? new File(opt.f).newInputStream() : System.in
 bPrompt = (opt.p || !opt.f)
@@ -67,14 +68,21 @@ writeLock = opt.w
 timeout = Integer.decode((opt.T) ?: "0")
 running = true
 def writer = echo ? new OutputStreamWriter(System.out) : new StringWriter()
-def mulgaraBase = (opt.M) ? opt.M : MULGARA_BASE
-def mulgaraUri  = "rmi://${mulgaraBase}${MULGARA_LOC}"
+def mulgaraUri, clFactory
+if (opt.D) {
+  mulgaraUri = "local://${MULGARA_LOC}"
+  clFactory  = new DefaultItqlClientFactory(dbDir: opt.D)
+} else {
+  def mulgaraBase = (opt.M) ? opt.M : MULGARA_BASE
+  mulgaraUri = "rmi://${mulgaraBase}${MULGARA_LOC}"
+  clFactory  = new DefaultItqlClientFactory()
+}
 verbose = opt.v
 if (verbose) {
   println "Mulgara URI: $mulgaraUri"
 }
 
-factory = new SessionFactoryImpl(tripleStore:new ItqlStore(mulgaraUri.toURI()))
+factory = new SessionFactoryImpl(tripleStore:new ItqlStore(mulgaraUri.toURI(), clFactory))
 session = factory.openSession()
 
 help = new HashMap()

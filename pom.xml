@@ -157,6 +157,16 @@
               <scriptpath>
                 <element>${pom.basedir}/src/main/groovy</element>
               </scriptpath>
+              <classpath>
+                <element>
+                  <groupId>org.mulgara</groupId>
+                  <artifactId>mulgara</artifactId>
+                </element>
+                <element>
+                  <groupId>org.topazproject</groupId>
+                  <artifactId>string-compare-resolver</artifactId>
+                </element>
+              </classpath>
               <source>
                 this.class.classLoader.addClasspath("${project.build.resources[0].directory}")
                 RunTql.main("${args}")
