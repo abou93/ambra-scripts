@@ -37,7 +37,7 @@ csv = "csv"
 table = "table reduce quote"
 
 // Parse command line
-def cli = new CliBuilder(usage: 'run-tql [-M mulgarahost:port|-D directory] [-f script] [-T timeout] [-iwtpvN]')
+def cli = new CliBuilder(usage: 'run-tql [-M mulgarahost:port|-D directory] [-S servername] [-f script] [-T timeout] [-iwtpvN]')
 cli.h(longOpt:'help', 'usage information')
 cli.v(longOpt:'verbose', 'turn on verbose mode')
 cli.e(longOpt:'echo', 'echo script file when running')
@@ -47,6 +47,7 @@ cli.N(longOpt:'noprettyprint', 'Do not pretty-print results')
 cli.i(longOpt:'runinit', 'Run ~/.runtql even if running a script')
 cli.M(args:1, 'Mulgara host:port')
 cli.D(args:1, 'directory (embedded mulgara)')
+cli.S(args:1, 'the servername, i.e. the path part of the URI used to access mulgara')
 cli.T(args:1, 'Transaction timeout in seconds [default: 60]')
 cli.f(args:1, 'script file')
 cli.m(args:1, 'mode')
@@ -68,13 +69,18 @@ writeLock = opt.w
 timeout = Integer.decode((opt.T) ?: "0")
 running = true
 def writer = echo ? new OutputStreamWriter(System.out) : new StringWriter()
+
+def mulgaraPath = opt.S ?: MULGARA_LOC
+if (!mulgaraPath.startsWith('/'))
+  mulgaraPath = '/' + mulgaraPath
+
 def mulgaraUri, clFactory
 if (opt.D) {
-  mulgaraUri = "local://${MULGARA_LOC}"
+  mulgaraUri = "local://${mulgaraPath}"
   clFactory  = new DefaultItqlClientFactory(dbDir: opt.D)
 } else {
-  def mulgaraBase = (opt.M) ? opt.M : MULGARA_BASE
-  mulgaraUri = "rmi://${mulgaraBase}${MULGARA_LOC}"
+  def mulgaraBase = opt.M ?: MULGARA_BASE
+  mulgaraUri = "rmi://${mulgaraBase}${mulgaraPath}"
   clFactory  = new DefaultItqlClientFactory()
 }
 verbose = opt.v
