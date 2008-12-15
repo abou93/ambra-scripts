@@ -28,7 +28,7 @@ import jline.ConsoleReader;
 import jline.History;
 
 // Constants
-MULGARA_BASE = "localhost"
+MULGARA_BASE = "localhost:8111"
 MULGARA_LOC = "/topazproject"
 
 // In case somebody runs %mode = csv instead of %mode = "csv"
