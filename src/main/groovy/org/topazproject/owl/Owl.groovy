@@ -62,13 +62,13 @@ class Owl {
    */
    public static generate(ClassLoader cl, String[] args) {
      factory.preloadFromClasspath(cl)
-     generateOwl()
+     generateOwl(cl.getResourceAsStream("org/topazproject/owl/ambra.owl"))
    }
 
   /**
    * Generate the OWL statements
    */
-  static void generateOwl() {
+  static void generateOwl(InputStream is) {
     // Add Object to class meta-data
     Map<EntityMode, EntityBinder> binders = new HashMap<EntityMode, EntityBinder>()
     binders.put(EntityMode.POJO, new ClassBinder(Object.class))
@@ -77,7 +77,7 @@ class Owl {
                                                null, Collections.EMPTY_SET, Collections.EMPTY_SET))
     factory.validate()
 
-    OwlGenerator owlGen= new OwlGenerator("http://www.plos.org/content_model#", (SessionFactory)factory)
+    OwlGenerator owlGen= new OwlGenerator("http://www.plos.org/content_model#", is, factory)
     owlGen.addNamespaces(null, factory.listAliases())
     owlGen.generateClasses()
     owlGen.generateProperties()
