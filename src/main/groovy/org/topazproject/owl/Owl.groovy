@@ -77,7 +77,7 @@ class Owl {
                                                null, Collections.EMPTY_SET, Collections.EMPTY_SET))
     factory.validate()
 
-    OwlGenerator owlGen= new OwlGenerator("http://www.plos.org/content_model#", is, factory)
+    OwlGenerator owlGen= new OwlGenerator("http://www.topazproject.org/ambra#", is, factory)
     owlGen.addNamespaces(null, factory.listAliases())
     owlGen.generateClasses()
     owlGen.generateProperties()

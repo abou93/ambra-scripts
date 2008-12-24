@@ -19,10 +19,10 @@
   limitations under the License.
 -->
 <!DOCTYPE rdf:RDF [
-<!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-<!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#">
-<!ENTITY owl  "http://www.w3.org/2002/07/owl#">
-<!ENTITY xsd  "http://www.w3.org/2001/XMLSchema#">
+<!ENTITY rdf       "http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<!ENTITY rdfs      "http://www.w3.org/2000/01/rdf-schema#">
+<!ENTITY owl       "http://www.w3.org/2002/07/owl#">
+<!ENTITY xsd       "http://www.w3.org/2001/XMLSchema#">
 
 <!ENTITY dcterms   "http://purl.org/dc/terms/">
 <!ENTITY dctype    "http://purl.org/dc/dcmitype/">
@@ -32,7 +32,7 @@
 <!ENTITY ambra     "http://rdf.plos.org/RDF/">
 ]>
 
-<rdf:RDF xmlns="http://www.plos.org/content_model#" xml:base="http://www.plos.org/content_model#"
+<rdf:RDF xmlns="http://www.topazproject.org/ambra#" xml:base="http://www.topazproject.org/ambra#"
   xmlns:dcterms="&dcterms;"
   xmlns:dctype="&dctype;"
   xmlns:dc="&dc;"
@@ -43,7 +43,7 @@
   xmlns:rdf="&rdf;"
   xmlns:rdfs="&rdfs;">
 
-<owl:Ontology rdf:about="http://www.plos.org/content_model#"/>
+<owl:Ontology rdf:about="http://www.topazproject.org/ambra#"/>
 
 <owl:ObjectProperty rdf:about="&topaz;objectSize">
   <rdfs:subPropertyOf rdf:resource="&dcterms;extent"/>
