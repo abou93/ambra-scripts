@@ -363,18 +363,12 @@ def processLine(line, console, showPrompt) {
     line = ''
   }    
 
-  while (line.indexOf(';') != -1) {
-    pos = line.indexOf(';')
-    query = (query + " " + line.substring(0, pos)).trim() + ";"
-    if (query != ";") {
-      execute query
-      console?.getHistory()?.addToHistory(query)
-    }
+  query += " " + line
+  if (query.endsWith(";")) {
+    execute query.trim()
+    console?.getHistory()?.addToHistory(query)
     query = ""
-    line = line.substring(pos+1)
   }
-  if (line.trim() != "")
-    query += " " + line.trim()
 }
 
 // Read init file if it exists
