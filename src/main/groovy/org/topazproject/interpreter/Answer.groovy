@@ -27,7 +27,7 @@ class Value {
   /** The quoted value if quote() was called */
   String quotedValue
 
-  String toString() { return quotedValue ? quotedValue : value }
+  String toString() { return quotedValue ? quotedValue : value ? value : "-null-" }
   int size() { return toString().size() }
 
   /** 
@@ -89,7 +89,7 @@ class Row {
             val = new Empty()
           sqr.close()
           break
-        default: val = new Value(res.getString(var));
+        default: val = new Value(value: res.getString(var));
       }
       vals.add(val)
     }
