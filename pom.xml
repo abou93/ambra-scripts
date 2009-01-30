@@ -7,7 +7,7 @@
   <parent>
     <groupId>org.topazproject</groupId>
     <artifactId>ambra</artifactId>
-    <version>0.9.1-SNAPSHOT</version>
+    <version>0.9.1_rc1</version>
   </parent>
 
   <dependencies>
