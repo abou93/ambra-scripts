@@ -68,29 +68,35 @@ class Row {
     this.vars = vars
     vars.each() { hdrs.add(it) }
     vars.each() { var ->
-      def val
-      switch (res.getType(var)) {
-        case Results.Type.URI:        val = new Resource(res.getString(var)); break
-        case Results.Type.BLANK_NODE: val = new Blank(res.getString(var)); break
-        case Results.Type.LITERAL:
-          val = res.getLiteral(var)
-          switch (val.getDatatype()?.toString()) {
-            case "http://www.w3.org/2001/XMLSchema#int":  val = new RdfInt(val.value); break
-            case "http://www.w3.org/2001/XMLSchema#date": val = new RdfDate(val.value); break
-            default: val = new Literal(val.value)
-          }
-          break
-        case Results.Type.SUBQ_RESULTS:
-          // TODO: Handle a subquery that returns multiple subrows per row
-          Results sqr = res.getSubQueryResults(var)
-          if (sqr.next())
-            val = new Row(sqr, sqr.variables)
-          else
-            val = new Empty()
-          sqr.close()
-          break
-        default: val = new Value(value: res.getString(var));
+      def val = res.get(var)
+
+      if (val != null) {
+        switch (res.getType(var)) {
+          case Results.Type.URI:        val = new Resource(res.getString(var)); break
+          case Results.Type.BLANK_NODE: val = new Blank(res.getString(var)); break
+          case Results.Type.LITERAL:
+            val = res.getLiteral(var)
+            switch (val.getDatatype()?.toString()) {
+              case "http://www.w3.org/2001/XMLSchema#int":  val = new RdfInt(val.value); break
+              case "http://www.w3.org/2001/XMLSchema#date": val = new RdfDate(val.value); break
+              default: val = new Literal(val.value)
+            }
+            break
+          case Results.Type.SUBQ_RESULTS:
+            // TODO: Handle a subquery that returns multiple subrows per row
+            Results sqr = res.getSubQueryResults(var)
+            if (sqr.next())
+              val = new Row(sqr, sqr.variables)
+            else
+              val = new Empty()
+            sqr.close()
+            break
+          default: val = new Value(value: res.getString(var));
+        }
+      } else {
+        val = new Value(value: null)
       }
+
       vals.add(val)
     }
   }
