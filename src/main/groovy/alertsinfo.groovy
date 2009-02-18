@@ -22,7 +22,7 @@ import org.topazproject.otm.impl.SessionFactoryImpl;
 import org.topazproject.otm.stores.ItqlStore;
 
 // Constants
-MULGARA_BASE = "localhost"
+MULGARA_BASE = "localhost:8111"
 MULGARA_LOC = "/topazproject"
 LIMIT       = 1000
 MAX         = 10000000

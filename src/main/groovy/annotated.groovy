@@ -23,7 +23,7 @@ import org.topazproject.otm.stores.ItqlStore;
 import org.topazproject.xml.transform.cache.CachedSource;
 
 // Constants
-MULGARA_BASE = "localhost"
+MULGARA_BASE = "localhost:8111"
 MULGARA_LOC = "/topazproject"
 FEDORA_BASE = "localhost:9090"
 PREFS       = "<local:///topazproject#filter:model=preferences>"
