@@ -49,7 +49,6 @@ class CommonsConfigCategory {
   }
 
   static Object get(List<Configuration> configList, String key) {
-    List res = configList.collect{ get(it, key) }.flatten().findAll{ it }
-    return res
+    return configList.collect{ get(it, key) }.flatten().findAll{ it }
   }
 }
