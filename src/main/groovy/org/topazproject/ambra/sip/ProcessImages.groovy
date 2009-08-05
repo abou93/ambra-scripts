@@ -1,7 +1,7 @@
 /* $HeadURL::                                                                            $
  * $Id$
  *
- * Copyright (c) 2007-2008 by Topaz, Inc.
+ * Copyright (c) 2007-2009 by Topaz, Inc.
  * http://topazproject.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -122,7 +122,7 @@ public class ProcessImages {
       // write out the new manifest
       newZip.putNextEntry(SipUtil.MANIFEST)
 
-      newZip << '<?xml version="1.1"?>\n'
+      newZip << '<?xml version="1.0" encoding="UTF-8"?>\n'
       newZip << '<!DOCTYPE manifest SYSTEM "manifest.dtd">\n'
 
       def newManif = new groovy.xml.MarkupBuilder(new OutputStreamWriter(newZip, 'UTF-8'))

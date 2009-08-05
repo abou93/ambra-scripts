@@ -1,7 +1,7 @@
 /* $HeadURL::                                                                                    $
  * $Id$
  *
- * Copyright (c) 2006-2008 by Topaz, Inc.
+ * Copyright (c) 2006-2009 by Topaz, Inc.
  * http://topazproject.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -72,7 +72,7 @@ public class AddManifest {
       // write the manifest
       zout.putNextEntry(SipUtil.MANIFEST)
 
-      zout << '<?xml version="1.1"?>\n'
+      zout << '<?xml version="1.0" encoding="UTF-8"?>\n'
       zout << "<!DOCTYPE manifest SYSTEM \"${SipUtil.MANIFEST_DTD}\">\n"
 
       def manifest = new groovy.xml.MarkupBuilder(new OutputStreamWriter(zout, 'UTF-8'))
