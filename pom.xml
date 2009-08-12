@@ -5,7 +5,7 @@
   <name>Ambra Scripts</name>
 
   <parent>
-    <groupId>org.topazproject</groupId>
+    <groupId>org.ambraproject</groupId>
     <artifactId>ambra</artifactId>
     <version>0.9.4-SNAPSHOT</version>
   </parent>
@@ -22,39 +22,24 @@
     </dependency>
 
     <dependency>
-      <groupId>org.topazproject</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>conf-helper</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.topazproject</groupId>
-      <artifactId>otm-extras</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.topazproject</groupId>
-      <artifactId>otm</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.mulgara</groupId>
-      <artifactId>driver</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.topazproject</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>ambra-otm-models</artifactId>
-      <version>${pom.version}</version>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>entity-resolver</artifactId>
     </dependency>
 
     <dependency>
       <groupId>commons-lang</groupId>
       <artifactId>commons-lang</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.topazproject</groupId>
-      <artifactId>entity-resolver</artifactId>
     </dependency>
 
     <dependency>
@@ -84,9 +69,13 @@
     </dependency>
 
     <dependency>
-      <groupId>org.mulgara</groupId>
-      <artifactId>mulgara</artifactId>
-      <scope>test</scope>
+      <groupId>org.topazproject</groupId>
+      <artifactId>otm</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.topazproject</groupId>
+      <artifactId>otm-extras</artifactId>
     </dependency>
 
     <dependency>
@@ -94,6 +83,18 @@
       <artifactId>string-compare-resolver</artifactId>
       <scope>test</scope>
     </dependency>
+
+    <dependency>
+      <groupId>org.mulgara</groupId>
+      <artifactId>mulgara</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mulgara</groupId>
+      <artifactId>driver</artifactId>
+    </dependency>
+
   </dependencies>
 
   <build>
