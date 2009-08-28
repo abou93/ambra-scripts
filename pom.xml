@@ -198,13 +198,17 @@
                   <groupId>org.topazproject</groupId>
                   <artifactId>otm-extras</artifactId>
                 </element>
+                <element>
+                  <groupId>org.ambraproject</groupId>
+                  <artifactId>ambra-otm-models</artifactId>
+                </element>
               </classpath>
               <scriptpath>
                 <element>${pom.basedir}/src/main/groovy</element>
               </scriptpath>
               <source>
                 this.class.classLoader.addClasspath("${project.build.resources[0].directory}")
-                org.topazproject.owl.Owl.generate(this.class.classLoader, "${args}")
+                org.topazproject.owl.Owl.generate(this.class.classLoader)
               </source>
             </configuration>
           </plugin>
