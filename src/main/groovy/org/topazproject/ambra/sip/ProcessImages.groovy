@@ -215,7 +215,12 @@ public class ProcessImages {
     String uri = manif.articleBundle.object.
                        find{ it.representation.'@entry'.text().contains(entryName) }.'@uri'.text()
 
-    def ref = art.'**'*.'@xlink:href'.find{ it.text() == uri }.'..'
+    def linkInArticle = art.'**'*.'@xlink:href'.find { it.text() == uri }
+
+    if (!linkInArticle)
+       throw new IOException("xlink:href=\"${uri}\" not found in the article")
+
+    def ref = linkInArticle.'..'
     return ref.name() == 'supplementary-material' ? ref.name() : ref.'..'.name()
   }
 }
