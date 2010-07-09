@@ -1,8 +1,9 @@
 /* $HeadURL:: http://gandalf.topazproject.org/svn/head/plos/libs/runscripts/src/main/gro#$
  * $Id: Owl.groovy 4123 2007-12-03 03:40:28Z pradeep $
  *
- * Copyright (c) 2007-2008 by Topaz, Inc.
- * http://topazproject.org
+ * Copyright (c) 2007-2010 by Public Library of Science
+ * http://plos.org
+ * http://ambraproject.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

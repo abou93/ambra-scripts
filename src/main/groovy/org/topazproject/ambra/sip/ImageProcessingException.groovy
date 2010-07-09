@@ -1,8 +1,9 @@
 /* $HeadURL::                                                                            $
  * $Id$
  *
- * Copyright (c) 2008 by Topaz, Inc.
- * http://topazproject.org
+ * Copyright (c) 2006-2010 by Public Library of Science
+ * http://plos.org
+ * http://ambraproject.org
  *
  * Licensed under the Educational Community License version 1.0
  * http://opensource.org/licenses/ecl1.php
