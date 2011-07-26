@@ -59,9 +59,6 @@
   <xsl:output name="nlm-2.3"
       doctype-public="-//NLM//DTD Journal Publishing DTD v2.3 20070202//EN"
       doctype-system="&nlmpub;2.3/journalpublishing.dtd"/>
-  <xsl:output name="nlm-3.0"
-      doctype-public="-//NLM//DTD Journal Publishing DTD v3.0 20080202//EN"
-      doctype-system="&nlmpub;3.0/journalpublishing3.dtd"/>
 
   <!-- transform and write out the article -->
   <xsl:template match="/">
