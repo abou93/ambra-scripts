@@ -30,13 +30,8 @@
 
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>ambra-otm-models</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>${project.groupId}</groupId>
       <artifactId>entity-resolver</artifactId>
+      <version>${project.version}</version>
     </dependency>
 
     <dependency>
@@ -63,40 +58,6 @@
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-compress</artifactId>
     </dependency>
-
-    <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.topazproject</groupId>
-      <artifactId>otm</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.topazproject</groupId>
-      <artifactId>otm-extras</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.topazproject</groupId>
-      <artifactId>string-compare-resolver</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.mulgara</groupId>
-      <artifactId>mulgara</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.mulgara</groupId>
-      <artifactId>driver</artifactId>
-    </dependency>
-
   </dependencies>
 
   <build>
@@ -141,74 +102,6 @@
               <source>
                 this.class.classLoader.addClasspath("${project.build.resources[0].directory}")
                 RunGroovy.main("${args}")
-              </source>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-
-    <profile>
-      <id>run-tql</id>
-      <build>
-        <defaultGoal>org.codehaus.groovy.maven:gmaven-plugin:execute</defaultGoal>
-        <plugins>
-          <plugin>
-            <groupId>org.codehaus.groovy.maven</groupId>
-            <artifactId>gmaven-plugin</artifactId>
-            <configuration>
-              <scriptpath>
-                <element>${pom.basedir}/src/main/groovy</element>
-              </scriptpath>
-              <classpath>
-                <element>
-                  <groupId>org.mulgara</groupId>
-                  <artifactId>mulgara</artifactId>
-                </element>
-                <element>
-                  <groupId>org.topazproject</groupId>
-                  <artifactId>string-compare-resolver</artifactId>
-                </element>
-              </classpath>
-              <source>
-                this.class.classLoader.addClasspath("${project.build.resources[0].directory}")
-                RunTql.main("${args}")
-              </source>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-
-    <profile>
-      <id>generate-owl</id>
-      <build>
-        <defaultGoal>org.codehaus.groovy.maven:gmaven-plugin:execute</defaultGoal>
-        <plugins>
-          <plugin>
-            <groupId>org.codehaus.groovy.maven</groupId>
-            <artifactId>gmaven-plugin</artifactId>
-            <configuration>
-              <classpath>
-                <element>
-                  <groupId>org.topazproject</groupId>
-                  <artifactId>otm</artifactId>
-                </element>
-                <element>
-                  <groupId>org.topazproject</groupId>
-                  <artifactId>otm-extras</artifactId>
-                </element>
-                <element>
-                  <groupId>org.ambraproject</groupId>
-                  <artifactId>ambra-otm-models</artifactId>
-                </element>
-              </classpath>
-              <scriptpath>
-                <element>${pom.basedir}/src/main/groovy</element>
-              </scriptpath>
-              <source>
-                this.class.classLoader.addClasspath("${project.build.resources[0].directory}")
-                org.topazproject.owl.Owl.generate(this.class.classLoader)
               </source>
             </configuration>
           </plugin>

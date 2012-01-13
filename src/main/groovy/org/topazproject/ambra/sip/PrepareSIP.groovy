@@ -40,7 +40,7 @@ def cli = new CliBuilder(usage: usage, writer : new PrintWriter(System.out))
 cli.h(longOpt:'help', "help (this message)")
 cli.o(args:1, 'output.zip - new zip file containing prepared sip; if not specified\n' +
               '             then input file is overwritten')
-cli.c(args:1, 'config-overrides.xml - overrides /etc/topaz/ambra.xml')
+cli.c(args:1, 'config-overrides.xml - overrides /etc/ambra/ambra.xml')
 cli.v(args:0, 'verbose')
 cli.f(args:0, 'force - force a new manifest to be created even if one already exists')
 
