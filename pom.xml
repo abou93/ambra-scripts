@@ -2,14 +2,48 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ambraproject</groupId>
   <artifactId>ambra-scripts</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0</version>
   <packaging>pom</packaging>
   <name>Ambra Scripts</name>
 
+  <description>Administrative scripts for Ambra.</description>
+
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+      <comments>Copyright (c) 2006-2012 by PLoS</comments>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
   <properties>
-    <ambra.version>2.3.1</ambra.version>
+    <ambra.version>2.2.1</ambra.version>
     <saxon.version>8.7</saxon.version>
   </properties>
+
+  <scm>
+    <developerConnection>scm:svn:http://ambraproject.org/svn/ambra/ambra-scripts/tags/ambra-scripts-1.0</developerConnection>
+    <connection>scm:svn:http://ambraproject.org/svn/ambra/ambra-scripts/tags/ambra-scripts-1.0</connection>
+    <url>http://www.ambraproject.org/tags/ambra-scripts-1.0</url>
+  </scm>
+
+  <distributionManagement>
+    <repository>
+      <id>ambra</id>
+      <url>scp://maven.ambraproject.org/home/maven2/repository/release</url>
+    </repository>
+    <snapshotRepository>
+      <id>ambra.snapshot</id>
+      <url>scp://maven.ambraproject.org/home/maven2/repository/snapshot</url>
+      <uniqueVersion>false</uniqueVersion>
+    </snapshotRepository>
+    <site>
+      <id>ambra.javadoc</id>
+      <!-- This is where the site-deploy phase will put the documentation -->
+      <url>scp://maven.ambraproject.org/home/maven2/javadoc</url>
+    </site>
+  </distributionManagement>
 
   <dependencies>
     <dependency>
