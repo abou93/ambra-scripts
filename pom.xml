@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ambraproject</groupId>
   <artifactId>ambra-scripts</artifactId>
-  <version>1.0</version>
+  <version>1.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Ambra Scripts</name>
 
@@ -23,9 +23,9 @@
   </properties>
 
   <scm>
-    <developerConnection>scm:svn:http://ambraproject.org/svn/ambra/ambra-scripts/tags/ambra-scripts-1.0</developerConnection>
-    <connection>scm:svn:http://ambraproject.org/svn/ambra/ambra-scripts/tags/ambra-scripts-1.0</connection>
-    <url>http://www.ambraproject.org/tags/ambra-scripts-1.0</url>
+    <developerConnection>scm:svn:http://ambraproject.org/svn/ambra/ambra-scripts/</developerConnection>
+    <connection>scm:svn:http://ambraproject.org/svn/ambra/ambra-scripts/</connection>
+    <url>http://www.ambraproject.org/</url>
   </scm>
 
   <distributionManagement>
