@@ -35,7 +35,7 @@ public class ProcessImages {
   private static final Map<String, String[]> repsByCtxt = new HashMap<String, String[]>()
 
   static {
-    String[] smallMediumLarge = [ "PNG_S", "PNG_M", "PNG_L" ]
+    String[] smallMediumLarge = [ "PNG_I", "PNG_S", "PNG_M", "PNG_L" ]
     String[] singleLarge      = [ "PNG" ]
 
     repsByCtxt.put('fig',                 smallMediumLarge)
@@ -166,10 +166,15 @@ public class ProcessImages {
     def baseName = name.substring(0, name.lastIndexOf('.') + 1)
 
     use (CommonsConfigCategory) {
+      if (reps.any{ it == 'PNG_I' })
+        imgNames.add(imgUtil.resizeImage(file, baseName + 'PNG_I', 'png',
+                                         imgSet.inline.'@width'[0]?.toInteger() ?: 70, 0,
+                                         imgSet.inline.'@quality'[0]?.toInteger() ?: 70))
+
       if (reps.any{ it == 'PNG_S' })
         imgNames.add(imgUtil.resizeImage(file, baseName + 'PNG_S', 'png',
-                                         imgSet.small.'@width'[0]?.toInteger() ?: 70, 0,
-                                         imgSet.small.'@quality'[0]?.toInteger() ?: 70))
+            imgSet.small.'@width'[0]?.toInteger() ?: 70, 0,
+            imgSet.small.'@quality'[0]?.toInteger() ?: 70))
 
       if (reps.any{ it == 'PNG_M' })
         imgNames.add(imgUtil.resizeImage(file, baseName + 'PNG_M', 'png',
