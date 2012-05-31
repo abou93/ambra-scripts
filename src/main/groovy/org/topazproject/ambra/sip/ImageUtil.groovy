@@ -99,7 +99,7 @@ public class ImageUtil {
         .replaceFirst("@@PUBLISHER@@", publisher)
         .replaceFirst("@@TITLE@@", title.replaceAll("<", "&lt;").replaceAll(">", "&gt;").trim())
         .replaceFirst("@@ARTICLE_RIGHTS@@", rights)
-        .replaceFirst("@@ARTICLE_DOI@@", "info:doi/" + rights)
+        .replaceFirst("@@ARTICLE_DOI@@", "info:doi/" + articleDoi)
 
     File tempXmp = File.createTempFile(file.getName(), ".xmp")
     tempXmp.deleteOnExit()
