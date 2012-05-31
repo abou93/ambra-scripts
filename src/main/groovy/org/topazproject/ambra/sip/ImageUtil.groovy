@@ -34,16 +34,78 @@ public class ImageUtil {
   boolean verbose
   String  imConvert
   String  imIdentify
+  String  imMogrify
   File    tmpDir
+
+  static final String XMP_TEMPLATE = "<?xpacket begin='﻿' id='W5M0MpCehiHzreSzNTczkc9d'?>\n" +
+      "<x:xmpmeta xmlns:x='adobe:ns:meta/' x:xmptk='Image::ExifTool 8.60'>\n" +
+      "<rdf:RDF xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>\n" +
+      "\n" +
+      " <rdf:Description rdf:about=''\n" +
+      "  xmlns:dc='http://purl.org/dc/elements/1.1/'>\n" +
+      "  <dc:date>\n" +
+      "   <rdf:Seq>\n" +
+      "    <rdf:li>@@ARTICLE_DATE@@</rdf:li>\n" +
+      "   </rdf:Seq>\n" +
+      "  </dc:date>\n" +
+      "  <dc:description>\n" +
+      "   <rdf:Alt>\n" +
+      "    <rdf:li xml:lang='x-default'>@@DESCRIPTION@@</rdf:li>\n" +
+      "   </rdf:Alt>\n" +
+      "  </dc:description>\n" +
+      "  <dc:identifier>@@DOI@@</dc:identifier>\n" +
+      "  <dc:publisher>\n" +
+      "   <rdf:Bag>\n" +
+      "    <rdf:li>@@PUBLISHER@@</rdf:li>\n" +
+      "   </rdf:Bag>\n" +
+      "  </dc:publisher>\n" +
+      "  <dc:title>\n" +
+      "   <rdf:Alt>\n" +
+      "    <rdf:li xml:lang='x-default'>@@TITLE@@</rdf:li>\n" +
+      "   </rdf:Alt>\n" +
+      "  </dc:title>\n" +
+      "  <dc:rights>\n" +
+      "   <rdf:Alt>\n" +
+      "    <rdf:li xml:lang='x-default'>@@ARTICLE_RIGHTS@@</rdf:li>\n" +
+      "   </rdf:Alt>\n" +
+      "  </dc:rights>\n" +
+      " </rdf:Description>\n" +
+      "\n" +
+      " <rdf:Description rdf:about=''\n" +
+      "  xmlns:photoshop='http://ns.adobe.com/photoshop/1.0/'>\n" +
+      "  <photoshop:Source>@@ARTICLE_DOI@@</photoshop:Source>\n" +
+      " </rdf:Description>\n" +
+      "</rdf:RDF>\n" +
+      "</x:xmpmeta>\n" +
+      "<?xpacket end='w'?>";
 
   public ImageUtil(Configuration config, boolean verbose) {
     use (CommonsConfigCategory) {
       def im = config.ambra.services.documentManagement.imageMagick[0]
       imConvert  = im.executablePath ?: 'convert'
       imIdentify = im.identifyPath   ?: 'identify'
+      imMogrify =  im.mogrifyPath    ?: 'mogrify'
       tmpDir     = new File(im.tempDirectory ?: System.getProperty('java.io.tmpdir'))
     }
     this.verbose = verbose
+  }
+
+  public void addMetadata(File file, String pubDate, String description, String doi,
+                          String publisher, String title, String articleDoi, String rights) {
+    String xmp = XMP_TEMPLATE
+        .replaceFirst("@@ARTICLE_DATE@@", pubDate)
+        .replaceFirst("@@DESCRIPTION@@", description.replaceAll("<", "&lt;").replaceAll(">", "&gt;").trim())
+        .replaceFirst("@@DOI@@", "info:doi/" + doi)
+        .replaceFirst("@@PUBLISHER@@", publisher)
+        .replaceFirst("@@TITLE@@", title.replaceAll("<", "&lt;").replaceAll(">", "&gt;").trim())
+        .replaceFirst("@@ARTICLE_RIGHTS@@", rights)
+        .replaceFirst("@@ARTICLE_DOI@@", "info:doi/" + rights)
+
+    File tempXmp = File.createTempFile(file.getName(), ".xmp")
+    tempXmp.deleteOnExit()
+    tempXmp.withOutputStream{ it << new ByteArrayInputStream(xmp.getBytes()) }
+    antExec(imMogrify, "-profile XMP:${tempXmp.canonicalPath} ${file.canonicalPath}")
+    tempXmp.delete()
   }
 
   /** 
