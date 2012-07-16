@@ -22,6 +22,7 @@ package org.topazproject.ambra.sip
 
 import org.apache.commons.configuration.Configuration
 import org.topazproject.ambra.util.ToolHelper
+import java.util.regex.Matcher
 
 /**
  * Create scaled down versions of all images and add them as additional representations
@@ -94,7 +95,7 @@ public class ImageUtil {
                           String publisher, String title, String articleDoi, String rights) {
     String xmp = XMP_TEMPLATE
         .replaceFirst("@@ARTICLE_DATE@@", pubDate)
-        .replaceFirst("@@DESCRIPTION@@", description.replaceAll("<", "&lt;").replaceAll(">", "&gt;").trim())
+        .replaceFirst("@@DESCRIPTION@@", Matcher.quoteReplacement(description.replaceAll("<", "&lt;").replaceAll(">", "&gt;").trim()))
         .replaceFirst("@@DOI@@", "info:doi/" + doi)
         .replaceFirst("@@PUBLISHER@@", publisher)
         .replaceFirst("@@TITLE@@", title.replaceAll("<", "&lt;").replaceAll(">", "&gt;").trim())
