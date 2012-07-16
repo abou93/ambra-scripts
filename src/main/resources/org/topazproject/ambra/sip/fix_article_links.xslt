@@ -41,24 +41,13 @@
 
   <xsl:preserve-space elements="*"/>
 
-  <xsl:output name="nlm-1.0"
-      doctype-public="-//NLM//DTD Journal Publishing DTD v1.0 20030210//EN"
-      doctype-system="&nlmpub;1.0/journalpublishing.dtd"/>
-  <xsl:output name="nlm-1.1"
-      doctype-public="-//NLM//DTD Journal Publishing DTD v1.1 20031101//EN"
-      doctype-system="&nlmpub;1.1/journalpublishing.dtd"/>
+  <!-- 1/4/12: deleted unused DTDs -->
   <xsl:output name="nlm-2.0"
       doctype-public="-//NLM//DTD Journal Publishing DTD v2.0 20040830//EN"
       doctype-system="&nlmpub;2.0/journalpublishing.dtd"/>
-  <xsl:output name="nlm-2.1"
-      doctype-public="-//NLM//DTD Journal Publishing DTD v2.1 20050630//EN"
-      doctype-system="&nlmpub;2.1/journalpublishing.dtd"/>
-  <xsl:output name="nlm-2.2"
-      doctype-public="-//NLM//DTD Journal Publishing DTD v2.2 20060430//EN"
-      doctype-system="&nlmpub;2.2/journalpublishing.dtd"/>
-  <xsl:output name="nlm-2.3"
-      doctype-public="-//NLM//DTD Journal Publishing DTD v2.3 20070202//EN"
-      doctype-system="&nlmpub;2.3/journalpublishing.dtd"/>
+  <xsl:output name="nlm-3.0"
+      doctype-public="-//NLM//DTD Journal Publishing DTD v3.0 20080202//EN"
+      doctype-system="&nlmpub;3.0/journalpublishing3.dtd"/>
 
   <!-- transform and write out the article -->
   <xsl:template match="/">
@@ -72,11 +61,27 @@
     <xsl:attribute name="xlink:href"><xsl:value-of select="my:fixup-link(.)"/></xsl:attribute>
   </xsl:template>
 
+  <!-- 12/14/11: modify copy -->
   <xsl:template match="@*|node()">
-    <xsl:copy>
+    <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*|node()"/>
     </xsl:copy>
   </xsl:template>
+  
+  <!-- 12/14/11: remove xsi namespace from <article> (added by 3.0 dtd) -->
+  <xsl:template match="article">
+    <xsl:element name="{name(.)}" namespace="{namespace-uri(.)}">
+      <xsl:copy-of copy-namespaces="no" select="namespace::*[name(.)!='xsi']"/>
+      <xsl:copy-of copy-namespaces="no" select="@*"/>
+      <xsl:apply-templates/>
+    </xsl:element>
+  </xsl:template>
+
+  <!-- 12/14/11: remove xml:lang attribute from journal-title (added by 3.0 dtd)-->
+  <xsl:template match="journal-title/@xml:lang"/>
+  
+  <!-- 12/14/11: remove orientation attribute from all elements to which 3.0 dtd adds it -->
+  <xsl:template match="@orientation"/>
 
   <!-- Fix up a link: doi: -> info:doi/, entry-names -> uri's -->
   <xsl:function name="my:fixup-link" as="xs:string">

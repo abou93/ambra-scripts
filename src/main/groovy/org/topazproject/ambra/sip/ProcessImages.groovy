@@ -46,6 +46,7 @@ public class ProcessImages {
 
     repsByCtxt.put('fig',                 smallMediumLarge)
     repsByCtxt.put('table-wrap',          smallMediumLarge)
+    repsByCtxt.put('alternatives',        smallMediumLarge)
     repsByCtxt.put('disp-formula',        singleLarge)
     repsByCtxt.put('chem-struct-wrapper', singleLarge)
     repsByCtxt.put('inline-formula',      singleLarge)
