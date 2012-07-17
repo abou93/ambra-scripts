@@ -178,7 +178,7 @@ public class ProcessImages {
       //add metadata
       String copyright = getCopyright(articleXml)
       String pubDate = getPubDate(articleXml)
-      String articleDoi = articleXml.front.'article-meta'.'article-id'.text()
+      String articleDoi = articleXml.front.'article-meta'.'article-id'.find {it.'@pub-id-type' == 'doi'}.text()
       String title = context.label.text()
       String description = context.caption.text()
       String publisher = articleXml.front.'journal-meta'.publisher.'publisher-name'.text()
@@ -287,7 +287,10 @@ public class ProcessImages {
    * @return the type of copyright
    */
   private String getCopyright(def art){
-    def copyright = art.front.'article-meta'.'copyright-statement'.text()
+    def copyright = art.front.'article-meta'.'copyright-statement'.text() //nlm2.0
+    if (copyright.isEmpty()) {
+      copyright = art.front.'article-meta'.permissions.license.'license-p'.text() //nlm3.0
+    }
     for(type in COPYRIGHTS){
       if(copyright.contains(type) || copyright.contains(type.toLowerCase())){
         return type
