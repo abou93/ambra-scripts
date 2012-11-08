@@ -43,6 +43,7 @@ import org.topazproject.ambra.util.ToolHelper
  *       same object
  * </ol>
  *
+ * @author Bill OConnor
  * @author Ronald Tschalär
  */
 public class AddManifest {
@@ -69,6 +70,20 @@ public class AddManifest {
 
       // get a list of secondary objects
       def objs = entries*.minus(~/\.[^.]+$/).unique().minus(base)
+      def strkImgs = objs.grep(~/[A-Za-z]+\.[0-9]+\.strk$/)
+      def figs = objs.grep(~/[A-Za-z]+\.[0-9]+\.g[^.]+$/)
+      def tbls = objs.grep(~/[A-Za-z]+\.[0-9]+\.t[^.]+$/)
+      def strkImage = ""
+
+      println "Adding striking image. " + strkImgs
+      if (strkImgs.size() > 0) {
+         strkImage = strkImgs[strkImgs.size() - 1]
+      } else if (figs.size() > 0) {
+         strkImage = figs[figs.size() - 1]
+      } else if (tbls.size() > 0) {
+         strkImage = tbls[tbls.size() - 1]
+      }
+      println "Striking image " + strkImage
 
       // write the manifest
       zout.putNextEntry(SipUtil.MANIFEST)
@@ -78,6 +93,8 @@ public class AddManifest {
 
       def manifest = new groovy.xml.MarkupBuilder(new OutputStreamWriter(zout, 'UTF-8'))
       manifest.doubleQuotes = true
+      manifest.omitEmptyAttributes = true
+      manifest.omitNullAttributes = true
 
       manifest.'manifest' {
         articleBundle {
@@ -88,10 +105,17 @@ public class AddManifest {
           }
 
           for (obj in objs) {
-            object(uri:toUri(obj)) {
-              for (rep in entries.grep(~/${obj}\.[^.]+/))
-                representation(name:SipUtil.getRepName(rep), entry:rep)
-            }
+               if (strkImage.equals(obj)) {
+                   object(uri:toUri(obj), strkImage:'True') {
+                     for (rep in entries.grep(~/${obj}\.[^.]+/))
+                       representation(name:SipUtil.getRepName(rep), entry:rep)
+                   }
+               } else {
+                   object(uri:toUri(obj)) {
+                       for (rep in entries.grep(~/${obj}\.[^.]+/))
+                           representation(name:SipUtil.getRepName(rep), entry:rep)
+                   }
+               }
           }
         }
       }

@@ -39,7 +39,8 @@
 <!-- all included secondary objects (images, movies, data, etc) -->
 <!ELEMENT object (representation+) >
 <!ATTLIST object
-    uri         CDATA          #REQUIRED >
+    uri         CDATA          #REQUIRED 
+    strkImage   CDATA          #IMPLIED          >
 
 <!-- a specific representation.
    - 'name' is the name (label) to store this representation under;
@@ -51,6 +52,7 @@
     entry       CDATA          #REQUIRED >
 
 
+
 <!-- Example:
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE manifest SYSTEM "manifest.dtd">
@@ -60,7 +62,7 @@
       <representation name="XML" entry="my-article.xml"/>
       <representation name="PDF" entry="my-article.pdf"/>
     </article>
-    <object uri="info:doi/10.1371/journal.foo.00042.g001">
+    <object uri="info:doi/10.1371/journal.foo.00042.g001" strkImage="True">
       <representation name="PNG_S" entry="image01.small.png"/>
       <representation name="PNG_L" entry="image01.large.png"/>
     </object>

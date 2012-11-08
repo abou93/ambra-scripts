@@ -28,6 +28,7 @@ import groovy.util.slurpersupport.GPathResult
  * Create scaled down versions of all images and add them as additional representations
  * to the SIP.
  *
+ * @author bill oconnor
  * @author stevec
  * @author Ronald Tschalär
  */
@@ -50,6 +51,7 @@ public class ProcessImages {
     repsByCtxt.put('disp-formula',        singleLarge)
     repsByCtxt.put('chem-struct-wrapper', singleLarge)
     repsByCtxt.put('inline-formula',      singleLarge)
+    repsByCtxt.put('striking-image',      smallMediumLarge)
   }
 
   Configuration config
@@ -118,6 +120,8 @@ public class ProcessImages {
 
       def newManif = new groovy.xml.MarkupBuilder(new OutputStreamWriter(newZip, 'UTF-8'))
       newManif.doubleQuotes = true
+      newManif.omitEmptyAttributes = true
+      newManif.omitNullAttributes = true
 
       newManif.'manifest' {
         manif.articleBundle.each{ ab ->
@@ -131,7 +135,7 @@ public class ProcessImages {
             }
 
             for (obj in ab.object) {
-              object(uri:obj.@uri) {
+              object(uri:obj.@uri, strkImage:obj.@strkImage) {
                 for (r in obj.representation) {
                   representation(name:r.@name, entry:r.@entry)
                   for (img in newImageFiles[r.@entry.text()])
@@ -172,9 +176,13 @@ public class ProcessImages {
                             GPathResult articleXml, GPathResult manifest) {
     List<File> newImages = []
     String doi = getUri(manifest, name)
-    def context = getContextElement(name, doi, articleXml, manifest)
 
-    if(!context.name().equals("disp-formula") && !context.name().equals("inline-formula")) {
+    def Map contextRslt = getContextElement(name, doi, articleXml, manifest)
+    def context = contextRslt.context
+    def contextName = contextRslt.name
+
+    if(!contextName.equals("disp-formula") && !contextName.equals("inline-formula")
+            && !contextName.equals("striking-image") ) {
       //add metadata
       String copyright = getCopyright(articleXml)
       String pubDate = getPubDate(articleXml)
@@ -190,7 +198,7 @@ public class ProcessImages {
       }
     }
     if (name.toLowerCase().endsWith('.tif')) {
-      String[] reps = repsByCtxt[context.name()]
+      String[] reps = repsByCtxt[contextName]
       Configuration imgSet = getImageSet(articleXml)
       //make resized images
       List<File> newFiles = makeResizedImages(name, file, imgSet, reps)
@@ -303,14 +311,20 @@ public class ProcessImages {
   /**
    * Get the context element in the article for the link that points to the given entry.
    */
-  private Object getContextElement(String entryName, String uri, def art, def manif) {
+  private Map getContextElement(String entryName, String uri, def art, def manif) {
     def linkInArticle = art.'**'*.'@xlink:href'.find { it.text() == uri }
+
+    // If it is a striking-image it will not have a link in the xml
+    if (uri.endsWith("strk"))
+       return [name:'striking-image', context:null]
 
     if (!linkInArticle)
        throw new IOException("xlink:href=\"${uri}\" not found in the article")
 
     def ref = linkInArticle.'..'
-    return ref.name() == 'supplementary-material' ? ref : ref.'..'
+    ref = ref.name() == 'supplementary-material' ? ref : ref.'..'
+
+    return [name:ref.name(), context:ref]
   }
 
   /**
