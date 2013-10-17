@@ -69,7 +69,7 @@ public class AddManifest {
       def aeRep = entries.grep(~/${base}\.[^.]+/).minus(ae)
 
       // get a list of secondary objects
-      def objs = entries*.minus(~/\.[^.]+$/).unique().minus(base)
+      def objs = entries*.minus(~/\.[^.]+$/).unique().minus(base).sort()
       def strkImgs = objs.grep(~/[A-Za-z]+\.[0-9]+\.strk$/)
       def figs = objs.grep(~/[A-Za-z]+\.[0-9]+\.g[^.]+$/)
       def tbls = objs.grep(~/[A-Za-z]+\.[0-9]+\.t[^.]+$/)
