@@ -134,7 +134,11 @@ public class AddManifest {
 
   private String toUri(String name) throws IOException {
     name = name.substring(name.lastIndexOf('/') + 1);   // strip directories
-    return 'info:doi/10.1371/journal.' + URLEncoder.encode(name, 'UTF-8');
+    if(name.indexOf("annotation")) {
+        return 'info:doi/10.1371/annotation/' + URLEncoder.encode(name, 'UTF-8');
+    } else {
+        return 'info:doi/10.1371/journal.' + URLEncoder.encode(name, 'UTF-8');
+    }
   }
 
   /**
