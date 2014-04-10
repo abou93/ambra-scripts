@@ -171,7 +171,7 @@ public class ValidateSIP {
     String artUri = manif.articleBundle.article.'@uri';
     def refs = art.'**'*.'@xlink:href'.findAll{ isLocalLink(it.text(), artUri) }*.text()
 
-    for (entry in manif.articleBundle.object.'@uri'.findAll{ it -> !refs.contains(it.text()) })
+    for (entry in manif.articleBundle.object.'@uri'.findAll{ it -> (!refs.contains(it.text()) && !it.text().contains("strk")) })
       ve.addError("Found unreferenced entry in manifest: uri='${entry}'")
   }
 
