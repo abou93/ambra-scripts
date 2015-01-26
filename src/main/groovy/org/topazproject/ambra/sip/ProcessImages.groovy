@@ -1,5 +1,5 @@
-/* $HeadURL::                                                                            $
- * $Id$
+/* $HeadURL:: http://ambraproject.org/svn/ambra/ambra-scripts/head/src/main/groovy/org/t#$
+ * $Id: ProcessImages.groovy 12208 2012-11-08 23:00:43Z wtoconnor $
  *
  * Copyright (c) 2007-2010 by Public Library of Science
  * http://plos.org
@@ -48,6 +48,8 @@ public class ProcessImages {
     repsByCtxt.put('fig',                 smallMediumLarge)
     repsByCtxt.put('table-wrap',          smallMediumLarge)
     repsByCtxt.put('alternatives',        smallMediumLarge)
+/** new for apex alternatives equations **/ 
+    repsByCtxt.put('altEquation',         singleLarge)
     repsByCtxt.put('disp-formula',        singleLarge)
     repsByCtxt.put('chem-struct-wrapper', singleLarge)
     repsByCtxt.put('inline-formula',      singleLarge)
@@ -317,12 +319,14 @@ public class ProcessImages {
     // If it is a striking-image it will not have a link in the xml
     if (uri.endsWith("strk"))
        return [name:'striking-image', context:null]
-
     if (!linkInArticle)
        throw new IOException("xlink:href=\"${uri}\" not found in the article")
 
     def ref = linkInArticle.'..'
     ref = ref.name() == 'supplementary-material' ? ref : ref.'..'
+    // new for apex alternatives equations
+    if (uri =~ /e[0-9][0-9][0-9]/ && ref.name() == 'alternatives')
+       return [name:'altEquation', context:ref]
 
     return [name:ref.name(), context:ref]
   }
