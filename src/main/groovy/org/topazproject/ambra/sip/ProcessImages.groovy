@@ -1,5 +1,5 @@
-/* $HeadURL:: http://ambraproject.org/svn/ambra/ambra-scripts/head/src/main/groovy/org/t#$
- * $Id: ProcessImages.groovy 12208 2012-11-08 23:00:43Z wtoconnor $
+/* $HeadURL:: 
+ * $Id: 
  *
  * Copyright (c) 2007-2010 by Public Library of Science
  * http://plos.org
@@ -48,7 +48,7 @@ public class ProcessImages {
     repsByCtxt.put('fig',                 smallMediumLarge)
     repsByCtxt.put('table-wrap',          smallMediumLarge)
     repsByCtxt.put('alternatives',        smallMediumLarge)
-/** new for apex alternatives equations **/ 
+    /** This is an alternative apex image if mathml does work **/ 
     repsByCtxt.put('altEquation',         singleLarge)
     repsByCtxt.put('disp-formula',        singleLarge)
     repsByCtxt.put('chem-struct-wrapper', singleLarge)
