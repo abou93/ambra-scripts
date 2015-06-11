@@ -24,6 +24,7 @@ import org.apache.commons.compress.archivers.ArchiveEntry
 import org.apache.commons.configuration.Configuration
 import groovy.util.slurpersupport.GPathResult
 
+
 /**
  * Create scaled down versions of all images and add them as additional representations
  * to the SIP.
@@ -97,10 +98,15 @@ public class ProcessImages {
 
       //any image files that are created by the image processing (e.g. png_m, etc.)
       Map<String, List<String>> newImageFiles = [:]
+      //pattern for looking at Supporting Info files
+      def p = ~/.s[0-9]{3}.*/
       for (entry in articleZip.entries()) {
+        //check filename against regex pattern
+        def m = entry.name =~ p
         if (entry.name == SipUtil.MANIFEST)
           continue              // a new one is written below
-        if (isImage(entry.name)) {
+        // if regex (SI file) was not found and it's an image, go ahead
+        if (isImage(entry.name) && !(m)) {
           File f = File.createTempFile('tmp_', entry.name)
           f.withOutputStream{ it << articleZip.getInputStream(entry) }
           if (verbose) {
