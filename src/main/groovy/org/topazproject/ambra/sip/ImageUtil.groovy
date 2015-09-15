@@ -132,8 +132,11 @@ public class ImageUtil {
     if (quality < 0 || quality > 100)
       quality = 100;
 
+    def inName = "${inFile.canonicalPath}"
+    if (inName.toLowerCase().endsWith(".tif"))
+        inName += "[0]";
     def resize = (width || height) ? "-resize ${width ?: ''}x${height ?: ''}>" : ''
-    antExec(imConvert, "\"${inFile.canonicalPath}\" ${resize} -quality ${quality} " +
+    antExec(imConvert, "\"${inName}\" ${resize} -quality ${quality} " +
                        "\"${type}:${newFile}\"")
 
     return newFile
