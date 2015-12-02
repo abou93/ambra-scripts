@@ -1,3 +1,6 @@
+
+THIS PACKAGE OF SCRIPTS HAVE BEEN DEPRECATED AS OF DECEMBER 2ND, 2015, AND THEIR REPLACEMENT SCRIPTS ARE FOUND HERE: https://github.com/PLOS/production_apex_scripts/tree/master/prepare_zip
+
 This project contains a series of Groovy scrips for preparing archives to ingest into the ambra platform
 
 Prerequisites:
